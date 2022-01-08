@@ -26,6 +26,7 @@ namespace ShirayuriMeshibe
         void OnGUI()
         {
             EditorGUILayout.LabelField("Modify mesh bounds.", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox("FBXファイルのメッシュは直接変更することはできません。\nそのようなメッシュを変更したいときはMeshを複製してから更新してください。", MessageType.Info);
             EditorGUILayout.Space(10f);
 
             using (new EditorGUI.IndentLevelScope())
@@ -59,6 +60,7 @@ namespace ShirayuriMeshibe
 
                 EditorGUILayout.Space(10f);
                 EditorGUILayout.LabelField("Bounds", EditorStyles.boldLabel);
+                EditorGUILayout.HelpBox("変更できるのはCenter,Extentsだけです。\nMin,Maxは自動で算出されます。", MessageType.Info);
                 using (new EditorGUI.IndentLevelScope())
                 {
 
@@ -85,6 +87,8 @@ namespace ShirayuriMeshibe
                             bounds.center = _center;
                             bounds.extents = _extents;
                             _mesh.bounds = bounds;
+                            EditorUtility.SetDirty(_mesh);
+                            AssetDatabase.SaveAssets();
 
                             _isChanged = true;
 
