@@ -1,0 +1,10 @@
+{
+    "name": "com.shirayuri_meshibe.cluster.editor_tool_kit",
+    "displayName": "Cluster Editor Tool Kit",
+    "version": "0.0.0",
+    "unity": "2019.4",
+    "description": "Cluster World制作時のお助けスクリプト",
+    "dependencies": {
+        "mu.cluster.cluster-creator-kit": "1.14.1"
+    }
+}
