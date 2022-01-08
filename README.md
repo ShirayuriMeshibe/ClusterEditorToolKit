@@ -12,6 +12,11 @@ Project Settingsの「Package Manager」にて以下の項目を登録してく�
 
 Package Managerウィンドウで「Add package from git url」で「com.shirayuri_meshibe.cluster.editor_tool_kit」と入力してAddを押してください。
 
+# 使い方
+Unityのメニューに機能を追加しています。
+
+[Cluster]-[Assets]-[Search Item] : Item検索
+
 # Requirement
 Cluster Creator Kit v1.14.1
 
