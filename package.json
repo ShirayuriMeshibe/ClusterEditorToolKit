@@ -1,10 +1,11 @@
 {
     "name": "com.shirayuri_meshibe.cluster.editor_tool_kit",
     "displayName": "Cluster Editor Tool Kit",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "unity": "2019.4",
     "keywords": [
-        "cluster"
+        "cluster",
+        "unity"
     ],
     "license": "MIT",
     "description": "Cluster World制作時のお助けスクリプト",
@@ -18,8 +19,5 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/ShirayuriMeshibe/ClusterEditorToolKit.git"
-    },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com/@shirayurimeshibe"
     }
 }
