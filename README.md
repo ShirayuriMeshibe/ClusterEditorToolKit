@@ -4,11 +4,13 @@ UnityPackageとして配布するためのテストでもあります。
 
 # Settings
 Project Settingsの「Package Manager」にて以下の項目を登録してください。
-| Name     | ShirayuriMeshibe |
-| URL      | https://registry.npmjs.com |
-| Scope(s) | com.shirayuri_meshibe.cluster |
+| Setting Label | Value                         |
+| ---           | ---                           |
+| Name          | ShirayuriMeshibe              |
+| URL           | https://registry.npmjs.com    |
+| Scope(s)      | com.shirayuri_meshibe.cluster |
 
-Package Managerウィンドウで「Add package from git url」で「com.shirayuri_meshibe.cluster.editor_tool_kit」と入力してOKを押してください。
+Package Managerウィンドウで「Add package from git url」で「com.shirayuri_meshibe.cluster.editor_tool_kit」と入力してAddを押してください。
 
 # Requirement
 Cluster Creator Kit v1.14.1
