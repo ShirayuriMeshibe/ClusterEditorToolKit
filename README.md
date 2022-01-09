@@ -5,7 +5,7 @@ clusterでワールドを制作するときに使用するサポート的な便�
 Project Settingsの「Package Manager」にて以下の項目を登録してください。
 | Setting Label | Value                         |
 | ---           | ---                           |
-| Name          | ShirayuriMeshibe              |
+| Name          | Meshibe                       |
 | URL           | https://registry.npmjs.com    |
 | Scope(s)      | com.shirayuri_meshibe.cluster |
 
