@@ -209,18 +209,10 @@ namespace ShirayuriMeshibe.SearchItem
                     return;
 
                 if(PrefabUtility.IsPartOfAnyPrefab(gameObject))
-                    EditorGUIUtility.PingObject(GetParent(gameObject.transform).gameObject);
+                    EditorGUIUtility.PingObject(gameObject.transform.GetRoot());
                 else
                     Selection.activeGameObject = result.GameObject;
             }
-        }
-
-        Transform GetParent(Transform transform)
-        {
-            if (transform.parent == null)
-                return transform;
-
-            return GetParent(transform.parent);
         }
 
         protected override bool CanMultiSelect(TreeViewItem item) => false;
@@ -267,7 +259,8 @@ namespace ShirayuriMeshibe.SearchItem
             //}
 
             //return list;
-            // MEMO: ALTキーを押したときに異常終了するのを防ぐ
+            // FIXME: ALTキーを押したときのイベントがどのように処理されているかわからないため
+            //        異常終了を防ぐための実装
             return new List<int>(0);
         }
 

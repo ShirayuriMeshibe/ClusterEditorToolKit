@@ -17,7 +17,7 @@ namespace ShirayuriMeshibe.SearchItem
 {
     public sealed class SeachItemEditorWindow : EditorWindow
     {
-        [MenuItem("Cluster/Assets/Search item")]
+        [MenuItem(EditorDefine.MenuNameRoot + "Search item")]
         static void ShowWindow()
         {
             EditorWindow.GetWindow<SeachItemEditorWindow>("SearchItem");

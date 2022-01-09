@@ -10,7 +10,7 @@ namespace ShirayuriMeshibe
     {
         const float LINE_MARGIN = 0.8f;
 
-        [MenuItem("Cluster/Assets/Modify Mesh Bounds")]
+        [MenuItem(EditorDefine.MenuNameRoot+"Modify Mesh Bounds")]
         static void ShowWindow()
         {
             EditorWindow.GetWindow<ModifyMeshBounds>("MeshBounds");
