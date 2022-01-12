@@ -17,13 +17,11 @@ namespace ShirayuriMeshibe.SearchItem
 {
     public sealed class SeachItemEditorWindow : EditorWindow
     {
-        [MenuItem(EditorDefine.MenuNameRoot + "Search item")]
+        [MenuItem(EditorDefine.MenuNameRoot + "Search/Search item")]
         static void ShowWindow()
         {
             EditorWindow.GetWindow<SeachItemEditorWindow>("SearchItem");
         }
-
-        [SerializeField] TreeViewState _treeViewState = null;
 
         Item _item = null;
 
@@ -38,6 +36,7 @@ namespace ShirayuriMeshibe.SearchItem
         bool _findPrefabs = false;
         bool _showDebugLog = false;
 
+        [SerializeField] TreeViewState _treeViewState = null;
         SearchResultTreeView _searchResultTreeView = null;
 
 
@@ -196,21 +195,7 @@ namespace ShirayuriMeshibe.SearchItem
 
                         if(_findPrefabs)
                         {
-                            var listGameObject = new List<GameObject>();
-                            var guids = AssetDatabase.FindAssets("t:GameObject");
-                            
-                            foreach(var guid in guids)
-                            {
-                                var path = AssetDatabase.GUIDToAssetPath(guid);
-                                if(!string.IsNullOrEmpty(path))
-                                {
-                                    var gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                                    if (gameObject != null)
-                                        listGameObject.Add(gameObject);
-                                }
-                            }
-
-                            prefabObjects = listGameObject.ToArray();
+                            prefabObjects = AssetDatabaseUtils.LoadAllAssets<GameObject>();
 
                             if(_showDebugLog)
                                 Debug.Log($"prefabObjects:{prefabObjects.Length}");

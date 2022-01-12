@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.IMGUI.Controls;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace ShirayuriMeshibe.SearchItem
 {
-    // https://github.com/rngtm/UnityEditor-TextureViewer
     class SearchResultTreeView : TreeView
     {
         class RootTreeViewItem : TreeViewItem

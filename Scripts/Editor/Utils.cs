@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 namespace ShirayuriMeshibe
 {
-    public static class Utils
+    internal static class Utils
     {
         static public string GetPath(Transform transform)
         {
@@ -29,6 +29,23 @@ namespace ShirayuriMeshibe
                 return;
             stringBuilder.Insert(0, string.Format($"/{transform.parent.name}"));
             GetPathRecursive(transform.parent, stringBuilder);
+        }
+
+        static public T[] GetComponents<T>(GameObject[] gameObjects) where T : Component
+        {
+            if (gameObjects == null)
+                return null;
+
+            var list = new List<T>();
+
+            foreach(var gameObject in gameObjects)
+            {
+                var components = gameObject.GetComponentsInChildren<T>(true);
+                if (components == null && components.Length == 0)
+                    continue;
+                list.AddRange(components);
+            }
+            return list.ToArray();
         }
     }
 }
