@@ -6,23 +6,23 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace ShirayuriMeshibe.SearchItem
+namespace ShirayuriMeshibe.Search.SearchItem
 {
-    abstract public class SearchOptionGimmick : SearchOption
+    abstract internal class SearchLogicGimmick : SearchLogic<TreeDataGimmickRoot, TreeDataGimmic, TreeDataGimmicData>
     {
         protected const string PropertyNameMovableItem = "movableItem";
         protected const string PropertyNameRidableItem = "ridableItem";
         protected const string PropertyNameCharacterItem = "characterItem";
         protected const string PropertyNameGlobalGimmickKey = "globalGimmickKey";
 
-        public SearchOptionGimmick(Type type) : base(type) { }
+        public SearchLogicGimmick(Type type) : base(type, EditorIconName.D_UnityEditor_Graphs_AnimatorControllerTool) { }
         public override SearchKind SearchKind => SearchKind.Gimmick;
     }
 
-    public class SearchOptionGimmickGlobal : SearchOptionGimmick
+    internal class SearchOptionGimmickGlobal : SearchLogicGimmick
     {
         public SearchOptionGimmickGlobal(Type type) : base(type) {}
-        override protected int SearchEveryComponent(Context context, Component component)
+        override protected void SearchEveryComponent(TreeDataSourceBuilder dataSourceBuilder, TreeData dataParent, Component component)
         {
             var serializedObject = new SerializedObject(component);
             var serializedProperty = serializedObject.FindProperty(PropertyNameGlobalGimmickKey);
@@ -33,15 +33,14 @@ namespace ShirayuriMeshibe.SearchItem
             // https://github.com/ClusterVR/ClusterCreatorKit/blob/96ec906c9bfd474c3468787f8ce97784273b64e4/Runtime/Gimmick/GimmickTarget.cs
             // GimmickTarget.Itemのとき
             if (serializedPropertyGimmickTarget.enumValueIndex == 0)
-                context.StartId = AddResultIfSpecifiedItem(context, component, serializedPropertyItem);
-            return context.StartId;
+                AddResultIfSpecifiedItem(dataSourceBuilder, dataParent, component, serializedPropertyItem);
         }
     }
 
-    public class SearchOptionGimmickLocal : SearchOptionGimmick
+    internal class SearchLogicGimmickLocal : SearchLogicGimmick
     {
-        public SearchOptionGimmickLocal(Type type) : base(type) { }
-        override protected int SearchEveryComponent(Context context, Component component)
+        public SearchLogicGimmickLocal(Type type) : base(type) { }
+        override protected void SearchEveryComponent(TreeDataSourceBuilder dataSourceBuilder, TreeData dataParent, Component component)
         {
             var serializedObject = new SerializedObject(component);
             var serializedPropertyGimmickKey = serializedObject.FindProperty(PropertyNameGimmickKey);
@@ -51,19 +50,18 @@ namespace ShirayuriMeshibe.SearchItem
             // https://github.com/ClusterVR/ClusterCreatorKit/blob/96ec906c9bfd474c3468787f8ce97784273b64e4/Runtime/Gimmick/GimmickTarget.cs
             // GimmickTarget.Itemのとき
             if (serializedPropertyGimmickTarget.enumValueIndex == 0)
-                context.StartId = AddResultIfSpecifiedItem(context, component, serializedPropertyItem);
-            return context.StartId;
+                AddResultIfSpecifiedItem(dataSourceBuilder, dataParent, component, serializedPropertyItem);
         }
     }
 
-    public class SearchOptionGimmickLocal<T> : SearchOptionGimmick where T : UnityEngine.Object
+    internal class SearchLogicGimmickLocal<T> : SearchLogicGimmick where T : UnityEngine.Object
     {
-        public SearchOptionGimmickLocal(Type type, string propertyName) : base(type)
+        public SearchLogicGimmickLocal(Type type, string propertyName) : base(type)
         {
             PropertyName = propertyName;
         }
         string PropertyName { get; set; }
-        override protected int SearchEveryComponent(Context context, Component component)
+        override protected void SearchEveryComponent(TreeDataSourceBuilder dataSourceBuilder, TreeData dataParent, Component component)
         {
             var serializedObject = new SerializedObject(component);
             var serializedPropertyGimmickKey = serializedObject.FindProperty(PropertyNameGimmickKey);
@@ -76,29 +74,28 @@ namespace ShirayuriMeshibe.SearchItem
             // https://github.com/ClusterVR/ClusterCreatorKit/blob/96ec906c9bfd474c3468787f8ce97784273b64e4/Runtime/Gimmick/GimmickTarget.cs
             // GimmickTarget.Itemのとき
             if (serializedPropertyGimmickTarget.enumValueIndex == 0)
-                context.StartId = AddResultIfSpecifiedItem(context, component, serializedPropertyItem);
-            return context.StartId;
+                AddResultIfSpecifiedItem(dataSourceBuilder, dataParent, component, serializedPropertyItem);
         }
     }
-    public class SearchOptionGimmickLocalMovable : SearchOptionGimmickLocal<MovableItem>
+    internal class SearchLogicGimmickLocalMovable : SearchLogicGimmickLocal<MovableItem>
     {
-        public SearchOptionGimmickLocalMovable(Type type) : base(type, PropertyNameMovableItem) { }
+        public SearchLogicGimmickLocalMovable(Type type) : base(type, PropertyNameMovableItem) { }
     }
 
-    public class SearchOptionGimmickLocalRidable : SearchOptionGimmickLocal<RidableItem>
+    internal class SearchLogicGimmickLocalRidable : SearchLogicGimmickLocal<RidableItem>
     {
-        public SearchOptionGimmickLocalRidable(Type type) : base(type, PropertyNameRidableItem) { }
+        public SearchLogicGimmickLocalRidable(Type type) : base(type, PropertyNameRidableItem) { }
     }
 
-    public class SearchOptionGimmickLocalCharacter : SearchOptionGimmickLocal<CharacterItem>
+    internal class SearchLogicGimmickLocalCharacter : SearchLogicGimmickLocal<CharacterItem>
     {
-        public SearchOptionGimmickLocalCharacter(Type type) : base(type, PropertyNameCharacterItem) { }
+        public SearchLogicGimmickLocalCharacter(Type type) : base(type, PropertyNameCharacterItem) { }
     }
 
-    public class SearchOptionGimmickPlayer : SearchOptionGimmick
+    internal class SearchLogicGimmickPlayer : SearchLogicGimmick
     {
-        public SearchOptionGimmickPlayer(Type type) : base(type) { }
-        override protected int SearchEveryComponent(Context context, Component component)
+        public SearchLogicGimmickPlayer(Type type) : base(type) { }
+        override protected void SearchEveryComponent(TreeDataSourceBuilder dataSourceBuilder, TreeData dataParent, Component component)
         {
             var serializedObject = new SerializedObject(component);
             var serializedPropertyGimmickKey = serializedObject.FindProperty(PropertyNameGimmickKey);
@@ -108,23 +105,21 @@ namespace ShirayuriMeshibe.SearchItem
             // https://github.com/ClusterVR/ClusterCreatorKit/blob/96ec906c9bfd474c3468787f8ce97784273b64e4/Runtime/Gimmick/GimmickTarget.cs
             // GimmickTarget.Itemのとき
             if (serializedPropertyGimmickTarget.enumValueIndex == 0)
-                context.StartId = AddResultIfSpecifiedItem(context, component, serializedPropertyItem);
-            return context.StartId;
+                AddResultIfSpecifiedItem(dataSourceBuilder, dataParent, component, serializedPropertyItem);
         }
     }
 
-    public class SearchOptionWarpItemGimmick : SearchOptionGimmick
+    internal class SearchLogicWarpItemGimmick : SearchLogicGimmick
     {
-        public SearchOptionWarpItemGimmick(Type type) : base(type) { }
-        override protected int SearchEveryComponent(Context context, Component component)
+        public SearchLogicWarpItemGimmick(Type type) : base(type) { }
+        override protected void SearchEveryComponent(TreeDataSourceBuilder dataSourceBuilder, TreeData dataParent, Component component)
         {
             var serializedObject = new SerializedObject(component);
             var serializedPropertyMovableItem = serializedObject.FindProperty(PropertyNameMovableItem);
             var movableItem = serializedPropertyMovableItem.objectReferenceValue as MovableItem;
             var serializedObjectMovableItem = new SerializedObject(movableItem);
             var serializedPropertyItem = serializedObjectMovableItem.FindProperty(PropertyNameItem);
-            context.StartId = AddResultIfSpecifiedItem(context, component, serializedPropertyItem);
-            return context.StartId;
+            AddResultIfSpecifiedItem(dataSourceBuilder, dataParent, component, serializedPropertyItem);
         }
     }
 }

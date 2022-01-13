@@ -5,18 +5,18 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityObject = UnityEngine.Object;
 
-namespace ShirayuriMeshibe.SearchTexture
+namespace ShirayuriMeshibe.Search.SearchTexture
 {
-    internal class TreeDataSourceMaterialRoot : TreeDataSource, ITreeDataSourceCount, ITreeDataSourceIcon
+    internal class TreeDataMaterialRoot : TreeData, ITreeDataCount, ITreeDataIcon
     {
-        public TreeDataSourceMaterialRoot()
+        public TreeDataMaterialRoot()
         {
             Name = "Material";
         }
         public int Count { get; set; }
         public Texture2D Icon { get; set; }
     }
-    internal class TreeDataSourceMaterial : TreeDataSource, ITreeDataSourceCount, ITreeDataSourceObject, ITreeDataSourceIcon
+    internal class TreeDataMaterial : TreeData, ITreeDataCount, ITreeDataObject, ITreeDataIcon
     {
         WeakReference<UnityObject> _weakReference = null;
         public int Count { get; set; }
@@ -39,7 +39,7 @@ namespace ShirayuriMeshibe.SearchTexture
         }
         public Texture2D Icon { get; set; }
     }
-    internal class TreeDataSourceRenderer : TreeDataSource, ITreeDataSourceObject, ITreeDataSourceIcon
+    internal class TreeDataRenderer : TreeData, ITreeDataObject, ITreeDataIcon
     {
         WeakReference<UnityObject> _weakReference = null;
         public UnityObject Object

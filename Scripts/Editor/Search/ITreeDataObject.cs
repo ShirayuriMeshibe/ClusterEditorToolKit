@@ -1,8 +1,8 @@
 ﻿using UnityObject = UnityEngine.Object;
 
-namespace ShirayuriMeshibe.SearchTexture
+namespace ShirayuriMeshibe.Search
 {
-    internal interface ITreeDataSourceObject
+    internal interface ITreeDataObject
     {
         UnityObject Object { get; set; }
     }

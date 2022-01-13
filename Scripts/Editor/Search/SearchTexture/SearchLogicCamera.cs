@@ -4,11 +4,11 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace ShirayuriMeshibe.SearchTexture
+namespace ShirayuriMeshibe.Search.SearchTexture
 {
-    internal class SearchLogicCamera : SearchLogic<Camera>
+    internal class SearchLogicCamera : SearchLogic
     {
-        public SearchLogicCamera() { }
+        public SearchLogicCamera(): base(typeof(Camera)) { }
         public override void Search(TreeDataSourceBuilder dataSourceBuilder, GameObject[] sceneObjects, GameObject[] prefabObjects)
         {
             SearchObjects(dataSourceBuilder, sceneObjects, EditorIconName.GameObject_On_Icon);
@@ -20,8 +20,8 @@ namespace ShirayuriMeshibe.SearchTexture
             if (gameObjects == null)
                 return;
 
-            var dataSourceRoot = dataSourceBuilder.CreateOrGetRoot<TreeDataSourceCameraRoot>();
-            dataSourceRoot.Icon = EditorGUIUtility.IconContent(EditorIconName.Camera_Icon).image as Texture2D;
+            var dataRoot = dataSourceBuilder.CreateOrGetRoot<TreeDataCameraRoot>();
+            dataRoot.Icon = EditorGUIUtility.IconContent(EditorIconName.Camera_Icon).image as Texture2D;
             var searchTexture = dataSourceBuilder.Context.Texture;
 
             foreach (var gameObject in gameObjects)
@@ -34,10 +34,10 @@ namespace ShirayuriMeshibe.SearchTexture
 
                     if (texture != null && texture == searchTexture)
                     {
-                        var dataSource = dataSourceBuilder.CreateAndAddChild<TreeDataSourceCamera>(dataSourceRoot);
-                        dataSource.Name = Utils.GetPath(camera.transform);
-                        dataSource.Object = camera;
-                        dataSource.Icon = EditorGUIUtility.IconContent(iconName).image as Texture2D;
+                        var data = dataSourceBuilder.CreateAndAddChild<TreeDataCamera>(dataRoot);
+                        data.Name = Utils.GetPath(camera.transform);
+                        data.Object = camera;
+                        data.Icon = EditorGUIUtility.IconContent(iconName).image as Texture2D;
 
                         if (dataSourceBuilder.Context.ShowDebugLog)
                             Debug.Log($"Camera. GameObject Path:{Utils.GetPath(camera.transform)}", camera);

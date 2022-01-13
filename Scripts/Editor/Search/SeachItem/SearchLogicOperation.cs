@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace ShirayuriMeshibe.SearchItem
+namespace ShirayuriMeshibe.Search.SearchItem
 {
-    abstract public class SearchOptionOperation : SearchOption
+    abstract internal class SearchLogicOperation : SearchLogic<TreeDataOperationRoot, TreeDataOperation, TreeDataOperationData>
     {
         protected const string PropertyNameGlobalGimmickKey = "globalGimmickKey";
 
-        public SearchOptionOperation(Type type) : base(type) { }
+        public SearchLogicOperation(Type type) : base(type, EditorIconName.PreAudioAutoPlayOff) { }
         public override SearchKind SearchKind => SearchKind.Operation;
     }
 
-    public class SearchOptionOperationGlobal : SearchOptionOperation
+    internal class SearchLogicOperationGlobal : SearchLogicOperation
     {
-        public SearchOptionOperationGlobal(Type type) : base(type) { }
-        override protected int SearchEveryComponent(Context context, Component component)
+        public SearchLogicOperationGlobal(Type type) : base(type) { }
+        override protected void SearchEveryComponent(TreeDataSourceBuilder dataSourceBuilder, TreeData dataParent, Component component)
         {
             var serializedObject = new SerializedObject(component);
             var serializedProperty = serializedObject.FindProperty(PropertyNameGlobalGimmickKey);
@@ -29,15 +27,14 @@ namespace ShirayuriMeshibe.SearchItem
             // https://github.com/ClusterVR/ClusterCreatorKit/blob/96ec906c9bfd474c3468787f8ce97784273b64e4/Runtime/Gimmick/GimmickTarget.cs
             // GimmickTarget.Itemのとき
             if (serializedPropertyGimmickTarget.enumValueIndex == 0)
-                context.StartId = AddResultIfSpecifiedItem(context, component, serializedPropertyItem);
-            return context.StartId;
+                AddResultIfSpecifiedItem(dataSourceBuilder, dataParent, component, serializedPropertyItem);
         }
     }
 
-    public class SearchOptionOperationLocal : SearchOptionOperation
+    internal class SearchLogicOperationLocal : SearchLogicOperation
     {
-        public SearchOptionOperationLocal(Type type) : base(type) { }
-        override protected int SearchEveryComponent(Context context, Component component)
+        public SearchLogicOperationLocal(Type type) : base(type) { }
+        override protected void SearchEveryComponent(TreeDataSourceBuilder dataSourceBuilder, TreeData dataParent, Component component)
         {
             var serializedObject = new SerializedObject(component);
             var serializedPropertyGimmickKey = serializedObject.FindProperty(PropertyNameGimmickKey);
@@ -47,15 +44,14 @@ namespace ShirayuriMeshibe.SearchItem
             // https://github.com/ClusterVR/ClusterCreatorKit/blob/96ec906c9bfd474c3468787f8ce97784273b64e4/Runtime/Gimmick/GimmickTarget.cs
             // GimmickTarget.Itemのとき
             if (serializedPropertyGimmickTarget.enumValueIndex == 0)
-                context.StartId = AddResultIfSpecifiedItem(context, component, serializedPropertyItem);
-            return context.StartId;
+                AddResultIfSpecifiedItem(dataSourceBuilder, dataParent, component, serializedPropertyItem);
         }
     }
 
-    public class SearchOptionOperationPlayer : SearchOptionOperation
+    internal class SearchLogicOperationPlayer : SearchLogicOperation
     {
-        public SearchOptionOperationPlayer(Type type) : base(type) { }
-        override protected int SearchEveryComponent(Context context, Component component)
+        public SearchLogicOperationPlayer(Type type) : base(type) { }
+        override protected void SearchEveryComponent(TreeDataSourceBuilder dataSourceBuilder, TreeData dataParent, Component component)
         {
             var serializedObject = new SerializedObject(component);
             var serializedPropertyGimmickKey = serializedObject.FindProperty(PropertyNameGimmickKey);
@@ -65,8 +61,7 @@ namespace ShirayuriMeshibe.SearchItem
             // https://github.com/ClusterVR/ClusterCreatorKit/blob/96ec906c9bfd474c3468787f8ce97784273b64e4/Runtime/Gimmick/GimmickTarget.cs
             // GimmickTarget.Itemのとき
             if (serializedPropertyGimmickTarget.enumValueIndex == 0)
-                context.StartId = AddResultIfSpecifiedItem(context, component, serializedPropertyItem);
-            return context.StartId;
+                AddResultIfSpecifiedItem(dataSourceBuilder, dataParent, component, serializedPropertyItem);
         }
     }
 }

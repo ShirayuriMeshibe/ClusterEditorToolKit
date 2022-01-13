@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-using UnityObject = UnityEngine.Object;
-
-namespace ShirayuriMeshibe.SearchTexture
+namespace ShirayuriMeshibe.Search.SearchTexture
 {
     internal abstract class SearchLogic
     {
@@ -20,15 +16,5 @@ namespace ShirayuriMeshibe.SearchTexture
         public Type Type { get; protected set; }
         public bool IncludeSearch { get; set; } = true;
         public abstract void Search(TreeDataSourceBuilder dataSourceBuilder, GameObject[] gameObjects, GameObject[] prefabObjects);
-    }
-
-    internal abstract class SearchLogic<T> : SearchLogic where T : UnityObject
-    {
-        public SearchLogic() : base(typeof(T)) {}
-
-        protected T[] GetComponents(GameObject gameObject)
-        {
-            return gameObject.GetComponentsInChildren<T>(true);
-        }
     }
 }

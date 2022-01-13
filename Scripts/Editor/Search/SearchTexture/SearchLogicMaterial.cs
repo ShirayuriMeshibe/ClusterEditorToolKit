@@ -4,18 +4,18 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace ShirayuriMeshibe.SearchTexture
+namespace ShirayuriMeshibe.Search.SearchTexture
 {
-    internal class SearchLogicMaterial : SearchLogic<Material>
+    internal class SearchLogicMaterial : SearchLogic
     {
-        public SearchLogicMaterial() {}
+        public SearchLogicMaterial() : base(typeof(Material)) {}
 
         public override void Search(TreeDataSourceBuilder dataSourceBuilder, GameObject[] sceneObjects, GameObject[] prefabObjects)
         {
             var context = dataSourceBuilder.Context;
             var materials = AssetDatabaseUtils.LoadAllAssets<Material>();
-            var dataSourceRoot = dataSourceBuilder.CreateOrGetRoot<TreeDataSourceMaterialRoot>();
-            dataSourceRoot.Icon = EditorGUIUtility.IconContent(EditorIconName.Material_Icon).image as Texture2D;
+            var dataRoot = dataSourceBuilder.CreateOrGetRoot<TreeDataMaterialRoot>();
+            dataRoot.Icon = EditorGUIUtility.IconContent(EditorIconName.Material_Icon).image as Texture2D;
 
             Renderer[] rendererInScenes = null;
             Renderer[] rendererInPrefabs = null;
@@ -35,61 +35,51 @@ namespace ShirayuriMeshibe.SearchTexture
                     continue;
 
                 var shader = material.shader;
-                TreeDataSourceMaterial dataSourceMaterial = null;
+                TreeDataMaterial data = null;
 
                 foreach (var propertyName in material.GetTexturePropertyNames())
                 {
-                    bool isInclude = false;
                     var texture = material.GetTexture(Shader.PropertyToID(propertyName));
 
                     if (texture != null && context.Texture == texture)
                     {
                         var propertyIndex = shader.FindPropertyIndex(propertyName);
 
+                        // シェーダーにはないプロパティも検索に含めるとき、または
                         // Shaderに含まれているプロパティのとき
-                        if (0 <= propertyIndex && shader.GetPropertyType(propertyIndex) == UnityEngine.Rendering.ShaderPropertyType.Texture)
+                        if (context.SearchUnusedProperties || (0 <= propertyIndex && shader.GetPropertyType(propertyIndex) == UnityEngine.Rendering.ShaderPropertyType.Texture))
                         {
-                            isInclude = true;
-                        }
-                        // 他のシェーダのプロパティがマテリアルの設定に残っているとき
-                        else
-                        {
-                            if (context.SearchUnusedProperties)
-                                isInclude = true;
-                        }
-
-                        if(isInclude)
-                        {
-                            dataSourceMaterial = dataSourceBuilder.CreateAndAddChild<TreeDataSourceMaterial>(dataSourceRoot);
-                            dataSourceMaterial.Name = material.name;
-                            dataSourceMaterial.Object = material;
-                            dataSourceMaterial.Icon = EditorIcon.GetIcon(material);
+                            data = dataSourceBuilder.CreateAndAddChild<TreeDataMaterial>(dataRoot);
+                            data.Name = material.name;
+                            data.Object = material;
+                            data.Icon = EditorIcon.GetIcon(material);
 
                             if (context.ShowDebugLog)
                                 Debug.Log($"Material. Name:{material.name}", material);
+                            break;
                         }
                     }
                 }
 
-                if(dataSourceMaterial != null)
+                if(data != null)
                 {
                     if (context.SearchRenderers)
                     {
-                        SearchRenderer(dataSourceBuilder, rendererInScenes, material, dataSourceMaterial);
-                        SearchRenderer(dataSourceBuilder, rendererInPrefabs, material, dataSourceMaterial);
+                        SearchRenderer(dataSourceBuilder, rendererInScenes, material, data);
+                        SearchRenderer(dataSourceBuilder, rendererInPrefabs, material, data);
                     }
 
                     if (context.SearchCustomRenderTextures)
-                        SearchCustomRenderer(dataSourceBuilder, customRenderTextureInPrefabs, material, dataSourceMaterial);
+                        SearchCustomRenderer(dataSourceBuilder, customRenderTextureInPrefabs, material, data);
 
                     // どこから参照されていないときは自分自身をカウントとして数える
-                    if (dataSourceMaterial.Children.Count == 0)
-                        dataSourceMaterial.Count = 1;
+                    if (data.Children.Count == 0)
+                        data.Count = 1;
                 }
             }
         }
 
-        void SearchRenderer(TreeDataSourceBuilder dataSourceBuilder, Renderer[] renderers, Material material, TreeDataSourceMaterial parent)
+        void SearchRenderer(TreeDataSourceBuilder dataSourceBuilder, Renderer[] renderers, Material material, TreeDataMaterial parent)
         {
             if (renderers == null)
                 return;
@@ -108,16 +98,16 @@ namespace ShirayuriMeshibe.SearchTexture
 
                     if(sharedMaterial == material && !hashSet.Contains(obj))
                     {
-                        var dataSource = dataSourceBuilder.CreateAndAddChild<TreeDataSourceRenderer>(parent);
-                        dataSource.Name = Utils.GetPath(obj.transform);
-                        dataSource.Object = obj;
-                        dataSource.Icon = EditorIcon.GetIcon(obj);
+                        var data = dataSourceBuilder.CreateAndAddChild<TreeDataRenderer>(parent);
+                        data.Name = Utils.GetPath(obj.transform);
+                        data.Object = obj;
+                        data.Icon = EditorIcon.GetIcon(obj);
                         hashSet.Add(obj);
                     }
                 }
             }
         }
-        void SearchCustomRenderer(TreeDataSourceBuilder dataSourceBuilder, CustomRenderTexture[] textures, Material material, TreeDataSourceMaterial parent)
+        void SearchCustomRenderer(TreeDataSourceBuilder dataSourceBuilder, CustomRenderTexture[] textures, Material material, TreeDataMaterial parent)
         {
             if (textures == null)
                 return;
@@ -142,10 +132,10 @@ namespace ShirayuriMeshibe.SearchTexture
 
                 if (isAdd)
                 {
-                    var dataSource = dataSourceBuilder.CreateAndAddChild<TreeDataSourceRenderer>(parent);
-                    dataSource.Name = texture.name;
-                    dataSource.Object = texture;
-                    dataSource.Icon = EditorIcon.GetIcon(texture);
+                    var data = dataSourceBuilder.CreateAndAddChild<TreeDataRenderer>(parent);
+                    data.Name = texture.name;
+                    data.Object = texture;
+                    data.Icon = EditorIcon.GetIcon(texture);
                     hashSet.Add(texture);
                 }
             }

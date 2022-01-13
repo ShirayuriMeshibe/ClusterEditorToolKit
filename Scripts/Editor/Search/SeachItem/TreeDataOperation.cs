@@ -3,18 +3,25 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityObject = UnityEngine.Object;
 
-namespace ShirayuriMeshibe.SearchTexture
+namespace ShirayuriMeshibe.Search.SearchItem
 {
-    internal class TreeDataSourceCameraRoot : TreeDataSource, ITreeDataSourceCount, ITreeDataSourceIcon
+    internal class TreeDataOperationRoot : TreeData, ITreeDataCount, ITreeDataIcon
     {
-        public TreeDataSourceCameraRoot()
+        public TreeDataOperationRoot()
         {
-            Name = "Camera";
+            Name = "Operation";
         }
         public int Count { get; set; }
         public Texture2D Icon { get; set; }
     }
-    internal class TreeDataSourceCamera : TreeDataSource, ITreeDataSourceObject, ITreeDataSourceIcon
+    internal class TreeDataOperation : TreeData, ITreeDataCount, ITreeDataIcon, ITreeDataType
+    {
+        public TreeDataOperation() { }
+        public int Count { get; set; }
+        public Texture2D Icon { get; set; }
+        public Type Type { get; set; }
+    }
+    internal class TreeDataOperationData : TreeData, ITreeDataObject, ITreeDataIcon
     {
         WeakReference<UnityObject> _weakReference = null;
         public UnityObject Object
@@ -23,9 +30,9 @@ namespace ShirayuriMeshibe.SearchTexture
             {
                 if (_weakReference == null)
                     return null;
-                if (!_weakReference.TryGetTarget(out UnityObject camera))
+                if (!_weakReference.TryGetTarget(out UnityObject obj))
                     return null;
-                return camera;
+                return obj;
             }
             set
             {

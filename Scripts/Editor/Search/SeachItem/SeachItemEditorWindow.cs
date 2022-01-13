@@ -13,7 +13,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace ShirayuriMeshibe.SearchItem
+namespace ShirayuriMeshibe.Search.SearchItem
 {
     public sealed class SeachItemEditorWindow : EditorWindow
     {
@@ -39,57 +39,56 @@ namespace ShirayuriMeshibe.SearchItem
         [SerializeField] TreeViewState _treeViewState = null;
         SearchResultTreeView _searchResultTreeView = null;
 
-
-        ReadOnlyCollection<SearchOption> _searchOptions = new List<SearchOption>()
+        ReadOnlyCollection<SearchLogic> _searchLogics = new List<SearchLogic>()
         {
             // Trigger
-            { new SearchOptionTriggerConstant(typeof(InitializePlayerTrigger)) }, // Specified Itemが選択できない
-            { new SearchOptionTriggerConstant(typeof(InteractItemTrigger)) },
-            { new SearchOptionTriggerVariable(typeof(IsGroundedCharacterItemTrigger)) },
-            { new SearchOptionTriggerVariable(typeof(OnAngularVelocityChangedItemTrigger)) },
-            { new SearchOptionTriggerConstant(typeof(OnCollideItemTrigger)) },
-            { new SearchOptionTriggerConstant(typeof(OnCreateItemTrigger)) },
-            { new SearchOptionTriggerConstant(typeof(OnGetOffItemTrigger)) },
-            { new SearchOptionTriggerConstant(typeof(OnGrabItemTrigger)) },
-            { new SearchOptionTriggerConstant(typeof(OnJoinPlayerTrigger)) },
-            { new SearchOptionTriggerConstant(typeof(OnReceiveOwnershipItemTrigger)) },
-            { new SearchOptionTriggerConstant(typeof(OnReleaseItemTrigger)) },
-            { new SearchOptionTriggerVariable(typeof(OnVelocityChangedItemTrigger)) },
-            { new SearchOptionTriggerSteerItem(typeof(SteerItemTrigger)) },
-            { new SearchOptionTriggerUseItem(typeof(UseItemTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(InitializePlayerTrigger)) }, // Specified Itemが選択できない
+            { new SearchLogicTriggerConstant(typeof(InteractItemTrigger)) },
+            { new SearchLogicTriggerVariable(typeof(IsGroundedCharacterItemTrigger)) },
+            { new SearchLogicTriggerVariable(typeof(OnAngularVelocityChangedItemTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(OnCollideItemTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(OnCreateItemTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(OnGetOffItemTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(OnGrabItemTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(OnJoinPlayerTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(OnReceiveOwnershipItemTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(OnReleaseItemTrigger)) },
+            { new SearchLogicTriggerVariable(typeof(OnVelocityChangedItemTrigger)) },
+            { new SearchLogicTriggerSteerItem(typeof(SteerItemTrigger)) },
+            { new SearchLogicTriggerUseItem(typeof(UseItemTrigger)) },
             // Operation
-            { new SearchOptionOperationGlobal(typeof(GlobalTriggerLottery)) },
-            { new SearchOptionOperationLocal(typeof(ItemTriggerLottery)) },
-            { new SearchOptionOperationPlayer(typeof(PlayerTriggerLottery)) },
+            { new SearchLogicOperationGlobal(typeof(GlobalTriggerLottery)) },
+            { new SearchLogicOperationLocal(typeof(ItemTriggerLottery)) },
+            { new SearchLogicOperationPlayer(typeof(PlayerTriggerLottery)) },
             // Gimmick
-            { new SearchOptionGimmickLocalMovable(typeof(AddContinuousForceItemGimmick)) },
-            { new SearchOptionGimmickLocalMovable(typeof(AddContinuousTorqueItemGimmick)) },
-            { new SearchOptionGimmickLocalMovable(typeof(AddInstantForceItemGimmick)) },
-            { new SearchOptionGimmickLocalMovable(typeof(AddInstantTorqueItemGimmick)) },
-            { new SearchOptionGimmickLocal(typeof(CreateItemGimmick)) },
-            { new SearchOptionGimmickLocal(typeof(DestroyItemGimmick)) },
-            { new SearchOptionGimmickLocalRidable(typeof(GetOffItemGimmick)) },
-            { new SearchOptionGimmickLocalCharacter(typeof(JumpCharacterItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(AddContinuousForceItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(AddContinuousTorqueItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(AddInstantForceItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(AddInstantTorqueItemGimmick)) },
+            { new SearchLogicGimmickLocal(typeof(CreateItemGimmick)) },
+            { new SearchLogicGimmickLocal(typeof(DestroyItemGimmick)) },
+            { new SearchLogicGimmickLocalRidable(typeof(GetOffItemGimmick)) },
+            { new SearchLogicGimmickLocalCharacter(typeof(JumpCharacterItemGimmick)) },
             { new SearchOptionGimmickGlobal(typeof(PlayAudioSourceGimmick)) },
             { new SearchOptionGimmickGlobal(typeof(PlayTimelineGimmick)) },
-            { new SearchOptionGimmickPlayer(typeof(RespawnPlayerGimmick)) },
-            { new SearchOptionGimmickLocalCharacter(typeof(SetAngularVelocityCharacterItemGimmick)) },
-            { new SearchOptionGimmickLocalMovable(typeof(SetAngularVelocityItemGimmick)) },
+            { new SearchLogicGimmickPlayer(typeof(RespawnPlayerGimmick)) },
+            { new SearchLogicGimmickLocalCharacter(typeof(SetAngularVelocityCharacterItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(SetAngularVelocityItemGimmick)) },
             { new SearchOptionGimmickGlobal(typeof(SetAnimatorValueGimmick)) },
             { new SearchOptionGimmickGlobal(typeof(SetFillAmountGimmick)) },
             { new SearchOptionGimmickGlobal(typeof(SetGameObjectActiveGimmick)) },
-            { new SearchOptionGimmickPlayer(typeof(SetJumpHeightRatePlayerGimmick)) },
-            { new SearchOptionGimmickPlayer(typeof(SetMoveSpeedRatePlayerGimmick)) },
+            { new SearchLogicGimmickPlayer(typeof(SetJumpHeightRatePlayerGimmick)) },
+            { new SearchLogicGimmickPlayer(typeof(SetMoveSpeedRatePlayerGimmick)) },
             { new SearchOptionGimmickGlobal(typeof(SetSliderValueGimmick)) },
             { new SearchOptionGimmickGlobal(typeof(SetTextGimmick)) },
-            { new SearchOptionGimmickLocalCharacter(typeof(SetVelocityCharacterItemGimmick)) },
-            { new SearchOptionGimmickLocalMovable(typeof(SetVelocityItemGimmick)) },
-            { new SearchOptionGimmickLocalMovable(typeof(SetWheelColliderBrakeTorqueItemGimmick)) },
-            { new SearchOptionGimmickLocalMovable(typeof(SetWheelColliderMotorTorqueItemGimmick)) },
-            { new SearchOptionGimmickLocalMovable(typeof(SetWheelColliderSteerAngleItemGimmick)) },
+            { new SearchLogicGimmickLocalCharacter(typeof(SetVelocityCharacterItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(SetVelocityItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(SetWheelColliderBrakeTorqueItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(SetWheelColliderMotorTorqueItemGimmick)) },
+            { new SearchLogicGimmickLocalMovable(typeof(SetWheelColliderSteerAngleItemGimmick)) },
             { new SearchOptionGimmickGlobal(typeof(StopTimelineGimmick)) },
-            { new SearchOptionWarpItemGimmick(typeof(WarpItemGimmick)) },
-            { new SearchOptionGimmickPlayer(typeof(WarpPlayerGimmick)) },
+            { new SearchLogicWarpItemGimmick(typeof(WarpItemGimmick)) },
+            { new SearchLogicGimmickPlayer(typeof(WarpPlayerGimmick)) },
         }.AsReadOnly();
 
         void OnEnable()
@@ -130,7 +129,7 @@ namespace ShirayuriMeshibe.SearchItem
                                 _scrollPositionTrigger = scrollView.scrollPosition;
                                 using (new EditorGUI.IndentLevelScope(2))
                                 {
-                                    foreach (var option in _searchOptions)
+                                    foreach (var option in _searchLogics)
                                     {
                                         if (option.SearchKind == SearchKind.Trigger)
                                             option.IncludeSearch = EditorGUILayout.ToggleLeft(option.Name, option.IncludeSearch);
@@ -147,7 +146,7 @@ namespace ShirayuriMeshibe.SearchItem
                                 _scrollPositionOperation = scrollView.scrollPosition;
                                 using (new EditorGUI.IndentLevelScope(2))
                                 {
-                                    foreach (var option in _searchOptions)
+                                    foreach (var option in _searchLogics)
                                     {
                                         if (option.SearchKind == SearchKind.Operation)
                                             option.IncludeSearch = EditorGUILayout.ToggleLeft(option.Name, option.IncludeSearch);
@@ -164,7 +163,7 @@ namespace ShirayuriMeshibe.SearchItem
                                 _scrollPositionGimmick = scrollView.scrollPosition;
                                 using (new EditorGUI.IndentLevelScope(2))
                                 {
-                                    foreach (var option in _searchOptions)
+                                    foreach (var option in _searchLogics)
                                     {
                                         if(option.SearchKind == SearchKind.Gimmick)
                                             option.IncludeSearch = EditorGUILayout.ToggleLeft(option.Name, option.IncludeSearch);
@@ -184,10 +183,12 @@ namespace ShirayuriMeshibe.SearchItem
                     EditorGUILayout.Space(5f);
                     if (GUILayout.Button("Search"))
                     {
-                        // TreeViewItemのidからObjectを検索するためのDictionary
-                        var dictionaryObjects = new Dictionary<int, SearchResultObject>();
-                        int id = 0;
-
+                        var context = new SearchContext()
+                        {
+                            Item = _item,
+                            ShowDebugLog = _showDebugLog,
+                        };
+                        var dataSourceBuilder = new TreeDataSourceBuilder(context);
                         var scene = EditorSceneManager.GetActiveScene();
                         var rootObjects = scene.GetRootGameObjects();
 
@@ -201,20 +202,10 @@ namespace ShirayuriMeshibe.SearchItem
                                 Debug.Log($"prefabObjects:{prefabObjects.Length}");
                         }
 
-                        foreach (var option in _searchOptions)
-                            id = option.Search(rootObjects, prefabObjects, _item, id, dictionaryObjects, _showDebugLog);
+                        foreach (var logic in _searchLogics)
+                            logic.Search(dataSourceBuilder, rootObjects, prefabObjects);
 
-                        // TreeViewに表示するデータの生成
-                        {
-                            var list = new List<SearchResultRoot>(_searchOptions.Count);
-                            foreach (var option in _searchOptions)
-                            {
-                                if (option.IncludeSearch)
-                                    list.Add(option.SearchResultRoot);
-                            }
-
-                            _searchResultTreeView.Setup(list, dictionaryObjects);
-                        }
+                        _searchResultTreeView.SetDataSource(dataSourceBuilder.Build());
                     }
                 }
             }
@@ -222,7 +213,18 @@ namespace ShirayuriMeshibe.SearchItem
             EditorGUILayout.Space(10f);
             using (new EditorGUILayout.VerticalScope(GUI.skin.box))
             {
-                EditorGUILayout.LabelField("Results", EditorStyles.boldLabel);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    EditorGUILayout.LabelField("Results", EditorStyles.boldLabel);
+                    GUILayout.FlexibleSpace();
+                    using (new EditorGUI.DisabledScope(!_searchResultTreeView.HasDataSource))
+                    {
+                        if (GUILayout.Button("Expand All"))
+                            _searchResultTreeView.ExpandAll();
+                        if (GUILayout.Button("Collapse All"))
+                            _searchResultTreeView.CollapseAll();
+                    }
+                }
                 var r1 = EditorGUILayout.GetControlRect(false, GUILayout.ExpandHeight(true));
                 _searchResultTreeView.OnGUI(r1);
             }

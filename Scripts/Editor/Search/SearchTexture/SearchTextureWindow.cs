@@ -13,7 +13,7 @@ using UnityEngine.Assertions;
 
 using UnityObject = UnityEngine.Object;
 
-namespace ShirayuriMeshibe.SearchTexture
+namespace ShirayuriMeshibe.Search.SearchTexture
 {
     public sealed class SearchTextureWindow : EditorWindow
     {
