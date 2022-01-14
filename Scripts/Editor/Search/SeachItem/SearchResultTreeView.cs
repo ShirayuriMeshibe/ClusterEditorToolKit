@@ -13,30 +13,30 @@ namespace ShirayuriMeshibe.Search.SearchItem
         public SearchResultTreeView(TreeViewState treeViewState) : base(treeViewState)
         {
         }
-        protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
-        {
-            var rows = GetRows() ?? new List<TreeViewItem>();
-            rows.Clear();
-            if (HasDataSource)
-            {
-                int indentLevel = 1;
+        //protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
+        //{
+        //    var rows = GetRows() ?? new List<TreeViewItem>();
+        //    rows.Clear();
+        //    if (HasDataSource)
+        //    {
+        //        int indentLevel = 1;
 
-                foreach (var dataSourceRoot in DataSource.RootObjects)
-                {
-                    if (0 < dataSourceRoot.GetCount())
-                    {
-                        var item = CreateFromDataSource(dataSourceRoot);
-                        item.IndentLevel = indentLevel;
+        //        foreach (var dataSourceRoot in DataSource.RootObjects)
+        //        {
+        //            if (0 < dataSourceRoot.GetCount())
+        //            {
+        //                var item = CreateFromDataSource(dataSourceRoot);
+        //                item.IndentLevel = indentLevel;
 
-                        root.AddChild(item);
-                        rows.Add(item);
+        //                root.AddChild(item);
+        //                rows.Add(item);
 
-                        AddRecursiveDataSource(rows, dataSourceRoot, item, indentLevel);
-                    }
-                }
-            }
-            return rows;
-        }
+        //                AddRecursiveDataSource(rows, dataSourceRoot, item, indentLevel);
+        //            }
+        //        }
+        //    }
+        //    return rows;
+        //}
         protected override void AddRecursiveDataSource(IList<TreeViewItem> rows, TreeData dataParent, SearchResultTreeViewItem parentItem, int indentLevel)
         {
             int level = indentLevel + 1;

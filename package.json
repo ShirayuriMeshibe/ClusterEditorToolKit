@@ -1,7 +1,7 @@
 {
     "name": "com.shirayuri_meshibe.cluster.editor_tool_kit",
     "displayName": "Cluster Editor Tool Kit",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "unity": "2019.4",
     "keywords": [
         "cluster",

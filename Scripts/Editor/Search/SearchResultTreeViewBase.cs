@@ -37,7 +37,7 @@ namespace ShirayuriMeshibe.Search
                 canSort = false,
                 width = 400f,
                 minWidth = 50f,
-                autoResize = true,
+                autoResize = false,
                 allowToggleVisibility = false
             };
             var countColumn = new MultiColumnHeaderState.Column()
@@ -152,7 +152,7 @@ namespace ShirayuriMeshibe.Search
                             _indentLevel = searchResultTreeViewItem.IndentLevel;
                             var r = rect;
                             r.x += indentWidth;
-                            EditorGUI.LabelField(r, new GUIContent(args.label, args.item.icon));
+                            EditorGUI.LabelField(r, new GUIContent(args.label, args.item.icon, args.label));
                         }
                         break;
                     // Count

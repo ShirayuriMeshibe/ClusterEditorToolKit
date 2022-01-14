@@ -27,6 +27,8 @@ namespace ShirayuriMeshibe
                 return EditorIconName.RenderTexture_Icon;
             if (obj is Material)
                 return EditorIconName.Material_Icon;
+            if (obj is ParticleSystem)
+                return EditorIconName.ParticleSystem_Icon;
             return EditorIconName.Help;
         }
     }

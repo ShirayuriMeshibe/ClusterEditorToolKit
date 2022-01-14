@@ -1,5 +1,4 @@
-﻿using ClusterVR.CreatorKit.Gimmick;
-using ClusterVR.CreatorKit.Gimmick.Implements;
+﻿using ClusterVR.CreatorKit.Gimmick.Implements;
 using ClusterVR.CreatorKit.Item.Implements;
 using ClusterVR.CreatorKit.Operation.Implements;
 using ClusterVR.CreatorKit.Trigger.Implements;
@@ -7,11 +6,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Assertions;
+[assembly: InternalsVisibleTo("ClusterEditorToolKit.EditorTests")]
 
 namespace ShirayuriMeshibe.Search.SearchItem
 {
@@ -48,6 +49,7 @@ namespace ShirayuriMeshibe.Search.SearchItem
             { new SearchLogicTriggerVariable(typeof(OnAngularVelocityChangedItemTrigger)) },
             { new SearchLogicTriggerConstant(typeof(OnCollideItemTrigger)) },
             { new SearchLogicTriggerConstant(typeof(OnCreateItemTrigger)) },
+            { new SearchLogicTriggerConstant(typeof(OnGetOnItemTrigger)) },
             { new SearchLogicTriggerConstant(typeof(OnGetOffItemTrigger)) },
             { new SearchLogicTriggerConstant(typeof(OnGrabItemTrigger)) },
             { new SearchLogicTriggerConstant(typeof(OnJoinPlayerTrigger)) },
@@ -57,8 +59,14 @@ namespace ShirayuriMeshibe.Search.SearchItem
             { new SearchLogicTriggerSteerItem(typeof(SteerItemTrigger)) },
             { new SearchLogicTriggerUseItem(typeof(UseItemTrigger)) },
             // Operation
+            { new SearchLogicOperationGlobal(typeof(GlobalLogic)) },
+            { new SearchLogicOperationGlobal(typeof(GlobalTimer)) },
             { new SearchLogicOperationGlobal(typeof(GlobalTriggerLottery)) },
+            { new SearchLogicOperationLocal(typeof(ItemLogic)) },
+            { new SearchLogicOperationLocal(typeof(ItemTimer)) },
             { new SearchLogicOperationLocal(typeof(ItemTriggerLottery)) },
+            { new SearchLogicOperationPlayer(typeof(PlayerLogic)) },
+            { new SearchLogicOperationPlayer(typeof(PlayerTimer)) },
             { new SearchLogicOperationPlayer(typeof(PlayerTriggerLottery)) },
             // Gimmick
             { new SearchLogicGimmickLocalMovable(typeof(AddContinuousForceItemGimmick)) },
@@ -165,7 +173,7 @@ namespace ShirayuriMeshibe.Search.SearchItem
                                 {
                                     foreach (var option in _searchLogics)
                                     {
-                                        if(option.SearchKind == SearchKind.Gimmick)
+                                        if (option.SearchKind == SearchKind.Gimmick)
                                             option.IncludeSearch = EditorGUILayout.ToggleLeft(option.Name, option.IncludeSearch);
                                     }
                                 }
@@ -194,11 +202,11 @@ namespace ShirayuriMeshibe.Search.SearchItem
 
                         GameObject[] prefabObjects = new GameObject[0];
 
-                        if(_findPrefabs)
+                        if (_findPrefabs)
                         {
                             prefabObjects = AssetDatabaseUtils.LoadAllAssets<GameObject>();
 
-                            if(_showDebugLog)
+                            if (_showDebugLog)
                                 Debug.Log($"prefabObjects:{prefabObjects.Length}");
                         }
 
