@@ -1,0 +1,1 @@
+インストール方法等は[こちら](/Assets/Package/README.md)を参照してください。
