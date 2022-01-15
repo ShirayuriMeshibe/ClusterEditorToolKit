@@ -1,0 +1,20 @@
+{
+    "name": "ClusterEditorToolKit.Editor",
+    "references": [
+        "GUID:6afc7a87754b74712bf1db60172d7bc2",
+        "GUID:a19be0bf1aced49c9834d695cfd05562",
+        "GUID:d3c0ea12ca0ef4edbbbad8158a5d4a57",
+        "GUID:9ac94f3c53ca74d2a89c0fc5b68a9d7e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
