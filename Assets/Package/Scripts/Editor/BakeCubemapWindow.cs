@@ -20,10 +20,10 @@ namespace ShirayuriMeshibe
             [InspectorName("1024")] Resolution1024 = 1024,
             [InspectorName("2048")] Resolution2048 = 2048,
         }
-        [MenuItem(EditorDefine.MenuNameRoot + "Bake Cubemap")]
+        [MenuItem(EditorDefine.MenuNameRoot + "Bake SkyBox(Cubemap)")]
         static void ShowWindow()
         {
-            EditorWindow.GetWindow<BakeCubemapWindow>("BakeCubemap");
+            EditorWindow.GetWindow<BakeCubemapWindow>("BakeSkyBox");
         }
 
         Resolution _resolution = Resolution.Resolution2048;
